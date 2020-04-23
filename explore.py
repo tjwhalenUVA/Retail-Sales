@@ -50,3 +50,11 @@ qnty_sold = sales.groupby(['StockCode', 'Description']).sum().nlargest(200, 'Qua
 #There are a handful of objects sold > 50k, then it tails off
 qnty_sold.plot(kind='bar', x='StockCode', y='Quantity')
 qnty_sold.loc[qnty_sold.Quantity >= 50000].plot(kind='bar', x='Description', y='Quantity')
+
+################ Calculate Item Support ################
+#Total Transactions
+sales.Invoice.nunique()
+#No of Transactions Item is in
+sales.StockCode.value_counts()
+#Support for each item (aka popularity)
+sales.StockCode.value_counts() / sales.Invoice.nunique()
