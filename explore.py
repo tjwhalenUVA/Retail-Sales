@@ -45,3 +45,8 @@ sales = sales.dropna()
 sales.isna().mean().round(4) * 100 #no more missing values
 
 ################ Plot Feature Distibutions ################
+#Get the total number of each item sold (StockCode)
+qnty_sold = sales.groupby(['StockCode', 'Description']).sum().nlargest(200, 'Quantity').reset_index()
+#There are a handful of objects sold > 50k, then it tails off
+qnty_sold.plot(kind='bar', x='StockCode', y='Quantity')
+qnty_sold.loc[qnty_sold.Quantity >= 50000].plot(kind='bar', x='Description', y='Quantity')
