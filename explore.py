@@ -58,3 +58,10 @@ sales.Invoice.nunique()
 sales.StockCode.value_counts()
 #Support for each item (aka popularity)
 sales.StockCode.value_counts() / sales.Invoice.nunique()
+
+################ Calculate Pair Confidence ################
+#Pivot so each row is a transaction and each column an item
+import apyori
+sales = sales.assign(tmp = sales.Quantity / sales.Quantity)
+trans = sales.pivot_table(index='Invoice', columns='StockCode', values='tmp', fill_value=0)
+
