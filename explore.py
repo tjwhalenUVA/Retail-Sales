@@ -1,6 +1,7 @@
 #Load required packages
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import os
 
 #Get file path location
@@ -44,4 +45,3 @@ sales = sales.dropna()
 sales.isna().mean().round(4) * 100 #no more missing values
 
 ################ Plot Feature Distibutions ################
-sales.head()
