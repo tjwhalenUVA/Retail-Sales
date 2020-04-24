@@ -12,6 +12,7 @@ import mlxtend as ml
 # %% Get file path location
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 file_path = os.path.join(__location__, 'online_retail_II.xlsx')
+df_store = os.path.join(__location__, 'df_store')
 
 # %% read in sales data https://archive.ics.uci.edu/ml/datasets/Online+Retail+II
 sales_09 = pd.read_excel(file_path, sheet_name='Year 2009-2010')
@@ -69,18 +70,15 @@ sales = sales[sales.StockCode.isin(item_trans_50)]
 # %% Market Basket Analysis
 # Pivot so each row is a transaction and each column an item
 sales = sales.assign(tmp = sales.Quantity / sales.Quantity)
-trans = sales.pivot_table(index='Invoice', columns='StockCode', values='tmp', fill_value=0)
+transactions = sales.pivot_table(index='Invoice', columns='StockCode', values='tmp', fill_value=0)
 
-# %% Calculate Item Support
-frequent_itemsets = apriori(trans, min_support=0.01, use_colnames=True)
+# %% Calculate MBA Statistics
+frequent_itemsets = apriori(transactions, min_support=0.015, use_colnames=True)
+frequent_itemsets.to_excel(os.path.join(df_store, 'frequent_itemsets.xlsx'), index=False)
 
-#Total Transactions
-sales.Invoice.nunique()
-#No of Transactions Item is in
-sales.StockCode.value_counts()
-#Support for each item (aka popularity)
-sales.StockCode.value_counts() / sales.Invoice.nunique()
+# %% Get Association Rules
+rules = association_rules(frequent_itemsets, metric="lift")
+rules.to_excel(os.path.join(df_store, 'rules.xlsx'), index=False)
 
-# %% Calculate Pair Confidence
-
-
+rules.sort_values('confidence', ascending = False, inplace = True)
+rules.head(10)
