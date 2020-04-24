@@ -63,7 +63,8 @@ sales = sales[~sales.StockCode.isin(drop_items)]
 
 # %% Remove Very Infrequent Items (running locally and need to preserve space)
 item_trans = sales.StockCode.value_counts()
-item_trans = item_trans[item_trans > 50]
+item_trans_50 = item_trans[item_trans > 50].index.tolist()
+sales = sales[sales.StockCode.isin(item_trans_50)]
 
 # %% Market Basket Analysis
 # Pivot so each row is a transaction and each column an item
