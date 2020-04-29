@@ -2,3 +2,4 @@ online_retail_II.xlsx
 .vscode/settings.json
 retail.code-workspace
 retail-sales.code-workspace
+df_store/*.xlsx
