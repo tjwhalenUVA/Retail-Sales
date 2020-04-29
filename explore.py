@@ -65,8 +65,8 @@ fig, ax = plt.subplots(figsize=(15,7))
 monthly_transactions.plot(ax=ax)
 #set ticks every week
 ax.xaxis.set_major_locator(mdates.MonthLocator())
-#set major ticks format
-#ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %y'))
+#Plot shows November is biggest month for sales
+#Reasons: Black Friday, Holiday Shopping
 
 
 # %%
