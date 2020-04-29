@@ -62,11 +62,6 @@ items = sales.StockCode.unique().tolist()
 drop_items = [x for x in items if not any(c.isdigit() for c in str(x))]
 sales = sales[~sales.StockCode.isin(drop_items)]
 
-<<<<<<< HEAD
-################ Calculate Pair Confidence ################
-#Pivot so each row is a transaction and each column an item
-import mlxtend
-=======
 # %% Remove Very Infrequent Items (running locally and need to preserve space)
 item_trans = sales.StockCode.value_counts()
 item_trans_50 = item_trans[item_trans > 50].index.tolist()
@@ -74,7 +69,6 @@ sales = sales[sales.StockCode.isin(item_trans_50)]
 
 # %% Market Basket Analysis
 # Pivot so each row is a transaction and each column an item
->>>>>>> bc5e3e2e706ebc4600413e1daf55bbf77891cbf9
 sales = sales.assign(tmp = sales.Quantity / sales.Quantity)
 transactions = sales.pivot_table(index='Invoice', columns='StockCode', values='tmp', fill_value=0)
 
