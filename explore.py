@@ -63,10 +63,24 @@ monthly_transactions.set_index('month',inplace=True)
 
 fig, ax = plt.subplots(figsize=(15,7))
 monthly_transactions.plot(ax=ax)
-#set ticks every week
 ax.xaxis.set_major_locator(mdates.MonthLocator())
+
 #Plot shows November is biggest month for sales
 #Reasons: Black Friday, Holiday Shopping
 
+# %% Price of items
+#Get each items price
+sales[['StockCode', 'Price']].drop_duplicates().sort_values('Price')
 
-# %%
+numeric = pd.to_numeric(sales['StockCode'], errors='coerce').notnull()
+non_numeric = pd.to_numeric(sales['StockCode'], errors='coerce').isnull()
+
+sales.loc[non_numeric].sort_values('StockCode')
+
+# %% Price vs Quantity ordered on average
+
+# %% What customers are ordering the most
+
+# %% What countris are ordering the most
+
+
