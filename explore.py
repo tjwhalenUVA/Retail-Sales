@@ -24,6 +24,20 @@ sales.head(5)
 #%%Customer ID should be stored as a string
 sales.CID = sales.CID.astype('object')
 
+# %% Remove Cancelled Orders
+#boolean array indicating which rows have a non integral number (i.e. starts with a letter)
+invoice_non_numeric = pd.to_numeric(sales['Invoice'], errors='coerce').isnull()
+#Some of these invoice_non_numeric records were for dept
+adjust_debt = sales['Invoice'].str.startswith('A', na = False)
+#Drop non_numeric_invoice records from sales data
+sales = sales.loc[~invoice_non_numeric]
+
+# %% Remove Non-5-digit integral number stock codes
+#Description of dataset inlies any other type of code in this field
+# is not associated with an actual stocked item and ofers no further explanation
+sc_numeric = pd.to_numeric(sales['StockCode'], errors='coerce').notnull()
+sales = sales.loc[sc_numeric]
+
 #Summarize Values in Columns
 #%%How many orders are there total?
 sales.Invoice.nunique()
@@ -70,12 +84,16 @@ ax.xaxis.set_major_locator(mdates.MonthLocator())
 
 # %% Price of items
 #Get each items price
-sales[['StockCode', 'Price']].drop_duplicates().sort_values('Price')
+sales[['StockCode', 'Description', 'Price']].drop_duplicates().sort_values('Price')
 
 numeric = pd.to_numeric(sales['StockCode'], errors='coerce').notnull()
 non_numeric = pd.to_numeric(sales['StockCode'], errors='coerce').isnull()
 
 sales.loc[non_numeric].sort_values('StockCode')
+
+sales.loc[non_numeric].StockCode.unique()
+
+
 
 # %% Price vs Quantity ordered on average
 
